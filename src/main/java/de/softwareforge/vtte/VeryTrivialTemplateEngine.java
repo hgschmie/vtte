@@ -177,11 +177,18 @@ public class VeryTrivialTemplateEngine
             if (properties.containsKey(key)) {
                 final Object value = properties.get(key);
                 if (value != null) {
-                    target.append(value.toString());
+                    if (value instanceof Boolean) {
+                        return ((Boolean)value).booleanValue();
+                    }
+                    else {
+                        target.append(value.toString());
+                    }
                     return true;
                 }
+                return false;
             }
-            else if (defaultValue.length() > 0) {
+
+            if (defaultValue.length() > 0) {
                 target.append(defaultValue);
                 return true;
             }

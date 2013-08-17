@@ -144,26 +144,6 @@ public class TestVeryTrivialTemplateEngine
     }
 
     @Test
-    public void testDefaultValue()
-    {
-        final String template = "Connect to {host}:{port:8080}";
-        final VeryTrivialTemplateEngine vtte = new VeryTrivialTemplateEngine(template);
-
-        Assert.assertEquals("Connect to foobar:8080",vtte.render(ImmutableMap.of("host", "foobar")));
-        Assert.assertEquals("Connect to foobar:4815",vtte.render(ImmutableMap.of("host", "foobar", "port", 4815)));
-    }
-
-    @Test
-    public void testDefaultValueWithColonAndSquares()
-    {
-        final String template = "Connect to {host:[fe80::1]}:{port:8080}";
-        final VeryTrivialTemplateEngine vtte = new VeryTrivialTemplateEngine(template);
-
-        Assert.assertEquals("Connect to [fe80::1]:8080",vtte.render(ImmutableMap.<String, String>of()));
-        Assert.assertEquals("Connect to foobar:4815",vtte.render(ImmutableMap.of("host", "foobar", "port", 4815)));
-    }
-
-    @Test
     public void testEscaping()
     {
         final String template = "Connect to \\[\\{value1}]\\{value2} backslash: \\\\";
