@@ -28,7 +28,7 @@
 
   <groupId>de.softwareforge</groupId>
   <artifactId>vtte</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <packaging>jar</packaging>
 
   <name>A very trivial template engine</name>
@@ -47,7 +47,7 @@
   <scm>
     <connection>scm:git:git://github.com/hgschmie/vtte.git</connection>
     <url>https://github.com/hgschmie/vtte</url>
-    <tag>HEAD</tag>
+    <tag>vtte-1.0</tag>
   </scm>
 
   <developers>
