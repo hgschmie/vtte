@@ -43,7 +43,7 @@ public class VeryTrivialTemplateEngine
 {
     private final String rootTemplate;
 
-    public VeryTrivialTemplateEngine(final String rootTemplate)
+x    public VeryTrivialTemplateEngine(final String rootTemplate)
     {
         if (rootTemplate == null) {
             throw new IllegalArgumentException("rootTemplate is null");
