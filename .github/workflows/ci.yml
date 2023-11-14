@@ -33,5 +33,5 @@ jobs:
           TAR_FILE="${{ runner.temp }}/output-${{ github.job }}-${{ github.run_number }}-${{ github.run_attempt }}.tar.gz"
           FOLDER=$(basename `pwd`)
           cd ..
-          tar czf $TAR_FILE $FOLDER
+          tar --exclude=.git czf $TAR_FILE $FOLDER
           tar tvzf $TAR_FILE
