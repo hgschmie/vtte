@@ -31,5 +31,5 @@ jobs:
       - name: Package
         run: |
           TAR_FILE="${{ runner.temp }}/output-${{ github.job }}-${{ github.run_number }}-${{ github.run_attempt }}.tar.gz"
-          tar cvz $TAR_FILE ${{ github.workspace }}
+          tar czf $TAR_FILE ${{ github.workspace }}
           tar tvzf $TAR_FILE
