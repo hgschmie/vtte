@@ -36,13 +36,13 @@ jobs:
           FOLDER=$(basename `pwd`)
           cd ..
           tar czf ${{ runner.temp }}/${{ env.tarFile }} --exclude=.git $FOLDER
-          ls -la ${{ runner.temp }}/${{ env.tarFile }}
+          mv ${{ runner.temp }}/${{ env.tarFile }} ${{ github.workspace }}
 
       - uses: keithweaver/aws-s3-github-action@v1.0.0
         name: Upload
         with:
           command: cp
-          source: ${{ runner.temp }}/${{ env.tarFile }}
+          source: ${{ github.workspace }}/${{ env.tarFile }}
           destination: s3://github-action-error-logs/${{ github.repository }}/${{ env.tarFile }}
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
