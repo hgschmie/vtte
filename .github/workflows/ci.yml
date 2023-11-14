@@ -36,6 +36,7 @@ jobs:
           FOLDER=$(basename `pwd`)
           cd ..
           tar czf ${{ runner.temp }}/${{ env.tarFile }} --exclude=.git $FOLDER
+          ls -la ${{ runner.temp }}/${{ env.tarFile }}
 
       - uses: keithweaver/aws-s3-github-action@v1.0.0
         name: Upload
