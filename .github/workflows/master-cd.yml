@@ -28,4 +28,4 @@ jobs:
           NEXUS_REPO_USER: ${{ secrets.NEXUS_REPO_USER }}
           NEXUS_REPO_PASSWORD: ${{ secrets.NEXUS_REPO_PASSWORD }}
         run: |
-          ./mvnw clean install
+          ./mvnw clean deploy
