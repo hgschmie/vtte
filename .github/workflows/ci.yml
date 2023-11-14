@@ -32,6 +32,7 @@ jobs:
           ./mvnw clean install
 
       - name: Package
+        if: failure()
         run: |
           FOLDER=$(basename `pwd`)
           cd ..
