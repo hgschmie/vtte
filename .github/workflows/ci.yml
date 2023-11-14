@@ -10,7 +10,7 @@ on:
       - master
 
 env:
-  tarFile: "${{ runner.temp }}/output-${{ github.job }}-${{ github.run_number }}-${{ github.run_attempt }}.tar.gz"
+  tarFile: "output-${{ github.job }}-${{ github.run_number }}-${{ github.run_attempt }}.tar.gz"
 
 jobs:
   ci:
@@ -35,13 +35,13 @@ jobs:
         run: |
           FOLDER=$(basename `pwd`)
           cd ..
-          tar czf ${{ env.tarFile }} --exclude=.git $FOLDER
+          tar czf ${{ runner.temp }}/${{ env.tarFile }} --exclude=.git $FOLDER
 
       - uses: keithweaver/aws-s3-github-action@v1.0.0
         name: Upload
         with:
           command: cp
-          source: ${{ env.tarFile }}
+          source: ${{ runner.temp }}/${{ env.tarFile }}
           destination: s3://github-action-error-logs/${{ github.repository }}/${{ env.tarFile }}
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
