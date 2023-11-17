@@ -15,6 +15,10 @@ env:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 11, 17, 21 ]
+        distribution: [ temurin ]
 
     steps:
       - uses: actions/checkout@v4
@@ -27,11 +31,44 @@ jobs:
           distribution: temurin
           cache: maven
 
-      - name: Build
-        run: |
-          ./mvnw clean install
+      - uses: actions/setup-java@v3
+        id: setup_test_jdk
+        name: Setup Test JDK
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: temurin
+          cache: maven
 
-      - name: Package
+      - id: set_build_jdk
+        name: Set the Build JDK
+        env:
+          JAVA_HOME: ${{ steps.setup_build_jdk.outputs.path }}
+        run: |
+          echo "$JAVA_HOME/bin" >> ${GITHUB_PATH}
+
+      - id: build_distribution
+        name: Build the distribution
+        env:
+          JAVA_HOME: ${{ steps.setup_build_jdk.outputs.path }}
+        run: |
+          ./mvnw -DskipTests clean install
+
+      - id: set_test_jdk
+        name: Set the Test JDK
+        env:
+          JAVA_HOME: ${{ steps.setup_test_jdk.outputs.path }}
+        run: |
+          echo "$JAVA_HOME/bin" >> ${GITHUB_PATH}
+
+      - id: run_tests
+        name: Run the tests
+        env:
+          JAVA_HOME: ${{ steps.setup_test_jdk.outputs.path }}
+        run: |
+          ./mvnw surefire:test
+
+      - id: package
+        name: Archive the build folder
         if: failure()
         run: |
           FOLDER=$(basename `pwd`)
@@ -40,7 +77,8 @@ jobs:
           mv ${{ runner.temp }}/${{ env.tarFile }} ${{ github.workspace }}
 
       - uses: keithweaver/aws-s3-github-action@v1.0.0
-        name: Upload
+        id: upload
+        name: Upload the build archive to S3
         if: failure()
         with:
           command: cp
