@@ -18,7 +18,6 @@ jobs:
     strategy:
       matrix:
         java-version: [ 11, 17, 21 ]
-        distribution: [ temurin ]
 
     steps:
       - uses: actions/checkout@v4
@@ -66,24 +65,3 @@ jobs:
           JAVA_HOME: ${{ steps.setup_test_jdk.outputs.path }}
         run: |
           ./mvnw surefire:test
-
-      - id: package
-        name: Archive the build folder
-        if: failure()
-        run: |
-          FOLDER=$(basename `pwd`)
-          cd ..
-          tar czf ${{ runner.temp }}/${{ env.tarFile }} --exclude=.git $FOLDER
-          mv ${{ runner.temp }}/${{ env.tarFile }} ${{ github.workspace }}
-
-      - uses: keithweaver/aws-s3-github-action@v1.0.0
-        id: upload
-        name: Upload the build archive to S3
-        if: failure()
-        with:
-          command: cp
-          source: ${{ github.workspace }}/${{ env.tarFile }}
-          destination: s3://github-action-error-logs/${{ github.repository }}/${{ env.tarFile }}
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: us-east-1
